@@ -2,12 +2,16 @@ import type { Session } from "./types";
 
 export const initialState: Session = {
   permissions: [],
+  fetching: true,
 };
 
 export const actionsType = {
   LOGIN: "login",
   FETCH: "fetch",
   LOGOUT: "logout",
+  LOADING: "loading",
+  ERROR: "error",
+  DONE: "done",
 };
 
 interface Action {
@@ -30,10 +34,23 @@ export default (state = initialState, action?: Action) => {
       return {
         ...state,
         ...action.payload,
+        fetching: false,
       };
     case actionsType.LOGOUT:
       return {
         permissions: [],
+      };
+    case actionsType.ERROR:
+      return {
+        permissions: [],
+        fetching: false,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        error: action.payload,
+      };
+    case actionsType.DONE:
+      return {
+        permissions: [],
+        fetching: false,
       };
     default:
       return state;

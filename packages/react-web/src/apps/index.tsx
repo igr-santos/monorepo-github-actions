@@ -1,10 +1,12 @@
-import { lazy, Suspense } from "react";
-import { BrowserRouter as Router, Link, Route, Switch } from "react-router-dom";
+import { ChakraProvider } from "@chakra-ui/react";
+import { lazy, Suspense, useContext } from "react";
+import { BrowserRouter as Router, Switch } from "react-router-dom";
 
-import { Loading } from "@/components";
-import { SessionProvider } from "@/tools/session";
+import { Loading, MenuApps } from "@/components";
+import { customTheme, FontsLoader } from "@/components/base";
+import { sessionContext, SessionProvider, SessionRoute } from "@/tools/session";
 
-import { fetchSession, login } from "./graphql-queries";
+import * as graphqlQueries from "./graphql-queries";
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-return
 const Accounts = lazy(() => import("./Accounts"));
@@ -13,28 +15,25 @@ const Admin = lazy(() => import("./Admin"));
 
 export default function Apps() {
   return (
-    <SessionProvider login={login} fetchSession={fetchSession}>
-      <Router>
-        <div>
-          <ul>
-            <li>
-              <Link to="/accounts">Accounts</Link>
-            </li>
-            <li>
-              <Link to="/admin">Admin</Link>
-            </li>
-          </ul>
-
-          <hr />
-
+    <Router>
+      <ChakraProvider theme={customTheme}>
+        <FontsLoader />
+        <SessionProvider
+          login={graphqlQueries.login}
+          fetchSession={graphqlQueries.fetchSession}
+        >
           <Suspense fallback={<Loading />}>
             <Switch>
-              <Route path="/accounts" component={Accounts} />
-              <Route path="/admin" component={Admin} />
+              <SessionRoute path="/accounts" component={Accounts} />
+              <SessionRoute
+                permission="admin"
+                path="/admin"
+                component={Admin}
+              />
             </Switch>
           </Suspense>
-        </div>
-      </Router>
-    </SessionProvider>
+        </SessionProvider>
+      </ChakraProvider>
+    </Router>
   );
 }

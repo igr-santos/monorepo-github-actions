@@ -7,4 +7,6 @@ export interface Session<T extends BaseUser = BaseUser> {
   data?: T;
   token?: string;
   permissions?: string[];
+  fetching: boolean;
+  error?: any;
 }
