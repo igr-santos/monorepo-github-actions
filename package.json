@@ -1,0 +1,22 @@
+{
+  "name": "monorepo-github-actions",
+  "description": "Boilerplate for monorepo, vite and github actions",
+  "version": "0.0.1",
+  "main": "index.js",
+  "repository": "git@github.com:igr-santos/monorepo-github-actions.git",
+  "author": "Igor Santos <igr.exe@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "prepare": "husky install",
+    "format": "yarn workspaces run format"
+  },
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
+  },
+  "devDependencies": {
+    "husky": "^7.0.2"
+  }
+}
